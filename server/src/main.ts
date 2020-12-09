@@ -96,3 +96,38 @@ app.post('/messages', async (inRequest: Request, inResponse: Response) => {
     inResponse.send('error')
   }
 })
+
+// Endpoints for contacts
+
+app.get('/contacts', async (inRequest: Request, inResponse: Response) => {
+  try {
+    const contactsWorker: Contacts.Worker = new Contacts.Worker()
+    const contacts: IContact[] = await contactsWorker.listContacts()
+    inResponse.json(contacts)
+  } catch (inError) {
+    inResponse.send('error')
+  }
+})
+
+app.post('/contacts', async (inRequest: Request, inResponse: Response) => {
+  try {
+    const contactsWorker: Contacts.Worker = new Contacts.Worker()
+    const contact: IContact = await contactsWorker.addContact(inRequest.body)
+    inResponse.json(contact)
+  } catch (inError) {
+    inResponse.send('error')
+  }
+})
+
+app.delete(
+  '/contacts/:id',
+  async (inRequest: Request, inResponse: Response) => {
+    try {
+      const contactsWorker: Contacts.Worker = new Contacts.Worker()
+      await contactsWorker.deleteContact(inRequest.params.id)
+      inResponse.send('ok')
+    } catch (inError) {
+      inResponse.send('error')
+    }
+  }
+)
