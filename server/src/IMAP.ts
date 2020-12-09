@@ -7,7 +7,7 @@ export interface ICallOptions {
   id?: number
 }
 
-export interface IMassage {
+export interface IMessage {
   id: string
   date: string
   from: string
@@ -59,5 +59,53 @@ export class Worker {
     }
     iterateChildren(mailboxes.children)
     return finalMailboxes
+  }
+
+  public async listMessages(inCallOptions: ICallOptions): Promise<IMessage[]> {
+    const client: any = await this.connectToServer()
+    const mailbox: any = await client.selectMailbox(inCallOptions.mailbox)
+    if (mailbox.exists === 0) {
+      await client.close()
+      return []
+    }
+    const messages: any = await client.listMessages(
+      inCallOptions.mailbox,
+      '1:*',
+      ['uid', 'envelope']
+    )
+    await client.close()
+    const finalMessages: IMessage[] = []
+    messages.forEach((inValue: any) => {
+      finalMessages.push({
+        id: inValue.uid,
+        date: inValue.envelope.date,
+        from: inValue.envelope.from[0].address,
+        subject: inValue.envelope.subject,
+      })
+    })
+    return finalMessages
+  }
+
+  public async getMessageBody(
+    inCallOptions: ICallOptions
+  ): Promise<string | undefined> {
+    const client: any = await this.connectToServer()
+    const messages: any[] = await client.listMessages(
+      inCallOptions.mailbox,
+      inCallOptions.id,
+      ['body[]'],
+      { byUid: true }
+    )
+    const parsed: ParsedMail = await simpleParser(messages[0]['body[]'])
+    await client.close()
+    return parsed.text
+  }
+
+  public async deleteMessage(inCallOptions: ICallOptions): Promise<any> {
+    const client: any = await this.connectToServer()
+    await client.deleteMessages(inCallOptions.mailbox, inCallOptions.id, {
+      byUid: true,
+    })
+    await client.close()
   }
 }

@@ -58,7 +58,7 @@ app.get(
   async (inRequest: Request, inResponse: Response) => {
     try {
       const imapWorker: IMAP.Worker = new IMAP.Worker(serverInfo)
-      const messageBody: string = await imapWorker.getMessageBody({
+      const messageBody: string | undefined = await imapWorker.getMessageBody({
         mailbox: inRequest.params.mailbox,
         id: parseInt(inRequest.params.id, 10),
       })
