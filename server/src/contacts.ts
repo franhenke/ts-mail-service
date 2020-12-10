@@ -28,4 +28,32 @@ export class Worker {
       })
     })
   }
+
+  public addContact(inContact: IContact): Promise<IContact> {
+    return new Promise((inResolve, inReject) => {
+      this.db.insert(inContact, (inError: Error | null, inNewDoc: IContact) => {
+        if (inError) {
+          inReject(inError)
+        } else {
+          inResolve(inNewDoc)
+        }
+      })
+    })
+  }
+
+  public deleteContact(inID: string): Promise<string> {
+    return new Promise((inResolve, inReject) => {
+      this.db.remove(
+        { _id: inID },
+        {},
+        (inError: Error | null, inNumRemoved: number) => {
+          if (inError) {
+            inReject(inError)
+          } else {
+            inResolve()
+          }
+        }
+      )
+    })
+  }
 }
