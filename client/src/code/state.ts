@@ -1,4 +1,7 @@
 import { config } from './config'
+import * as Contacts from './Contacts'
+import * as IMAP from './IMAP'
+import * as SMTP from './SMTP'
 
 export function createState(inParentComponent) {
   return {
@@ -69,6 +72,26 @@ export function createState(inParentComponent) {
         contactName: '',
         contactEmail: '',
       })
+    }.bind(inParentComponent),
+
+    setCurrentMailbox: function (inPath: string): void {
+      this.setState({ currentView: 'welcome', currentMailbox: inPath })
+      this.state.getMessages(inPath)
+    }.bind(inParentComponent),
+
+    getMessages: async function (inPath: string): Promise<void> {
+      this.state.showHidePleaseWait(true)
+      const imapWorker: IMAP.Worker = new IMAP.Worker()
+      const messages: IMAP.IMessage[] = await imapWorker.listMessages(inPath)
+      this.state.showHidePleaseWait(false)
+      this.state.clearMessages()
+      messages.forEach((inMessage: IMAP.IMessage) => {
+        this.state.addMessageToList(inMessage)
+      })
+    }.bind(inParentComponent),
+
+    clearMessages: function (): void {
+      this.setState({ messages: [] })
     }.bind(inParentComponent),
   }
 }
