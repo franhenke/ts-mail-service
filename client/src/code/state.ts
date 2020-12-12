@@ -180,5 +180,32 @@ export function createState(inParentComponent) {
         messageBody: messageBody,
       })
     }.bind(inParentComponent),
+
+    sendMessage: async function (): Promise<void> {
+      this.state.showHidePleaseWait(true)
+      const smtpWorker: SMTP.Worker = new SMTP.Worker()
+      await smtpWorker.sendMessage(
+        this.state.messageTo,
+        this.state.messageFrom,
+        this.state.messageSubject,
+        this.state.messageBody
+      )
+      this.state.showHidePleaseWait(false)
+      this.setState({ currentView: 'welcome' })
+    }.bind(inParentComponent),
+
+    deleteMessage: async function (): Promise<void> {
+      this.state.showHidePleaseWait(true)
+      const imapWorker: IMAP.Worker = new IMAP.Worker()
+      await imapWorker.deleteMessage(
+        this.state.messageID,
+        this.state.currentMailbox
+      )
+      this.state.showHidePleaseWait(false)
+      const cl = this.state.messages.filter(
+        (inElement) => inElement.id != this.state.messageID
+      )
+      this.setState({ messages: cl, currentView: 'welcome' })
+    }.bind(inParentComponent),
   }
 }
