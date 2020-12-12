@@ -127,5 +127,23 @@ export function createState(inParentComponent) {
       }
       this.setState({ [inEvent.target.id]: inEvent.target.value })
     }.bind(inParentComponent),
+
+    saveContact: async function (): Promise<void> {
+      const copiedList = this.state.contacts.slice(0)
+      this.state.showHidePleaseWait(true)
+      const contactWorker: Contacts.Worker = new Contacts.Worker()
+      const contact: Contacts.IContact = await contactWorker.addContact({
+        name: this.state.contactName,
+        email: this.state.contactEmail,
+      })
+      this.state.showHidePleaseWait(false)
+      copiedList.push(contact)
+      this.setState({
+        contacts: copiedList,
+        contactID: null,
+        contactName: '',
+        contactEmail: '',
+      })
+    }.bind(inParentComponent),
   }
 }
