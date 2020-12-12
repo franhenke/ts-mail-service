@@ -104,5 +104,28 @@ export function createState(inParentComponent) {
       })
       this.setState({ messages: copiedList })
     }.bind(inParentComponent),
+
+    showContact: function (
+      inID: string,
+      inName: string,
+      inEmail: string
+    ): void {
+      this.setState({
+        currentView: 'contact',
+        contactID: inID,
+        contactName: inName,
+        contactEmail: inEmail,
+      })
+    }.bind(inParentComponent),
+
+    fieldOnChange: function (inEvent: any): void {
+      if (
+        inEvent.target.id === 'contactName' &&
+        inEvent.target.value.length > 16
+      ) {
+        return
+      }
+      this.setState({ [inEvent.target.id]: inEvent.target.value })
+    }.bind(inParentComponent),
   }
 }
