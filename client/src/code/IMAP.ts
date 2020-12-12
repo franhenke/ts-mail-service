@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { config } from './config'
 
 export interface IMailbox {
@@ -16,7 +16,7 @@ export interface IMessage {
 
 export class Worker {
   public async listMessages(inMailbox: string): Promise<IMessage[]> {
-    const response: AxiosResponse = await Axios.get(
+    const response: AxiosResponse = await axios.get(
       `${config.serverAddress}/mailboxes/${inMailbox}`
     )
     return response.data
@@ -26,9 +26,13 @@ export class Worker {
     inID: string,
     inMailbox: string
   ): Promise<string> {
-    const response: AxiosResponse = await Axios.get(
+    const response: AxiosResponse = await axios.get(
       `${config.serverAddress}/messages/${inMailbox}/${inID}`
     )
     return response.data
+  }
+
+  public async deleteMessage(inID: string, inMailbox: string): Promise<void> {
+    await axios.delete(`${config.serverAddress}/messages/${inMailbox}/${inID}`)
   }
 }

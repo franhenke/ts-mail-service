@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { config } from './config'
 
 export interface IContact {
@@ -9,14 +9,14 @@ export interface IContact {
 
 export class Worker {
   public async listContacts(): Promise<IContact[]> {
-    const response: AxiosResponse = await Axios.get(
+    const response: AxiosResponse = await axios.get(
       `${config.serverAddress}/contacts`
     )
     return response.data
   }
 
   public async addContact(inContact: IContact): Promise<IContact> {
-    const response: AxiosResponse = await Axios.post(
+    const response: AxiosResponse = await axios.post(
       `${config.serverAddress}/contacts`,
       inContact
     )
@@ -24,6 +24,6 @@ export class Worker {
   }
 
   public async deleteContact(inID): Promise<void> {
-    await Axios.delete(`${config.serverAddress}/contacts/${inID}`)
+    await axios.delete(`${config.serverAddress}/contacts/${inID}`)
   }
 }
