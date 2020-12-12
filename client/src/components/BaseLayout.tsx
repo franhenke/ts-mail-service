@@ -10,6 +10,8 @@ import Toolbar from './Toolbar'
 import MailboxList from './MailboxList'
 import ContactList from './ContactList'
 import ContactView from './ContactView'
+import MessageList from './MessageList'
+import MessageView from './MessageView'
 
 class BaseLayout extends Component {
   state = createState(this)

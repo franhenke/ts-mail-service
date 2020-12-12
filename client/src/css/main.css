@@ -50,3 +50,7 @@
   padding-left: 4px;
   overflow: auto;
 }
+
+.messageInfoField {
+  color: #000000 !important;
+}

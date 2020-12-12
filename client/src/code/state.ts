@@ -161,5 +161,24 @@ export function createState(inParentComponent) {
         contactEmail: '',
       })
     }.bind(inParentComponent),
+
+    showMessage: async function (inMessage: IMAP.IMessage): Promise<void> {
+      this.state.showHidePleaseWait(true)
+      const imapWorker: IMAP.Worker = new IMAP.Worker()
+      const messageBody: String = await imapWorker.getMessageBody(
+        inMessage.id,
+        this.state.currentMailbox
+      )
+      this.state.showHidePleaseWait(false)
+      this.setState({
+        currentView: 'message',
+        messageID: inMessage.id,
+        messageDate: inMessage.date,
+        messageFrom: inMessage.from,
+        messageTo: '',
+        messageSubject: inMessage.subject,
+        messageBody: messageBody,
+      })
+    }.bind(inParentComponent),
   }
 }
