@@ -93,5 +93,16 @@ export function createState(inParentComponent) {
     clearMessages: function (): void {
       this.setState({ messages: [] })
     }.bind(inParentComponent),
+
+    addMessageToList: function (inMessage: IMAP.IMessage): void {
+      const copiedList = this.state.messages.slice(0)
+      copiedList.push({
+        id: inMessage.id,
+        date: inMessage.date,
+        from: inMessage.from,
+        subject: inMessage.subject,
+      })
+      this.setState({ messages: copiedList })
+    }.bind(inParentComponent),
   }
 }
