@@ -9,6 +9,7 @@ import { createState } from '../code/state'
 import Toolbar from './Toolbar'
 import MailboxList from './MailboxList'
 import ContactList from './ContactList'
+import ContactView from './ContactView'
 
 class BaseLayout extends Component {
   state = createState(this)

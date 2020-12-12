@@ -145,5 +145,21 @@ export function createState(inParentComponent) {
         contactEmail: '',
       })
     }.bind(inParentComponent),
+
+    deleteContact: async function (): Promise<void> {
+      this.state.showHidePleaseWait(true)
+      const contactsWorker: Contacts.Worker = new Contacts.Worker()
+      await contactsWorker.deleteContact(this.state.contactID)
+      this.state.showHidePleaseWait(false)
+      const copiedList = this.state.contacts.filter(
+        (inElement) => inElement._id != this.state.contactID
+      )
+      this.setState({
+        contacts: copiedList,
+        contactID: null,
+        contactName: '',
+        contactEmail: '',
+      })
+    }.bind(inParentComponent),
   }
 }
