@@ -7,6 +7,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { createState } from '../code/state'
 import Toolbar from './Toolbar'
+import MailboxList from './MailboxList'
+import ContactList from './ContactList';
 
 
 class BaseLayout extends Component {
