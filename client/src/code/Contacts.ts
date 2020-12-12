@@ -14,4 +14,16 @@ export class Worker {
     )
     return response.data
   }
+
+  public async addContact(inContact: IContact): Promise<IContact> {
+    const response: AxiosResponse = await Axios.post(
+      `${config.serverAddress}/contacts`,
+      inContact
+    )
+    return response.data
+  }
+
+  public async deleteContact(inID): Promise<void> {
+    await Axios.delete(`${config.serverAddress}/contacts/${inID}`)
+  }
 }
